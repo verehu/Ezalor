@@ -1,14 +1,15 @@
 apply plugin: 'com.android.library'
-apply from: 'publish.gradle'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+
         versionCode 1
-        versionName "1.0"
+        versionName rootProject.ext.VERSION_NAME
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -56,13 +57,11 @@ preBuild {
 
 dependencies {
     compileOnly fileTree(include: ['core-libart.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:$rootProject.appcompatVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.appcompatVersion"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compileOnly fileTree(include: ['*.jar'], dir: '../platformjar')
-
-
+    //compileOnly fileTree(include: ['*.jar'], dir: '../platformjar')
 }
 
 task clearJar(type: Delete) {
@@ -76,3 +75,5 @@ task makeJar(type: Copy) {
     rename('classes.jar', 'ezalor.jar')
 }
 makeJar.dependsOn(clearJar, build)
+
+apply from: 'publish.gradle'

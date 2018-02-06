@@ -2,8 +2,6 @@ package com.wellerv.ezalor;
 
 import android.system.ErrnoException;
 
-import com.wellerv.ezalor.IOHook;
-
 import java.io.FileDescriptor;
 import java.io.InterruptedIOException;
 import java.nio.ByteBuffer;
