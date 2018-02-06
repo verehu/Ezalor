@@ -52,7 +52,7 @@ final class IOPools {
         ioContext.ioRecord.process = Utils.getProcessName();
         ioContext.ioRecord.thread = Thread.currentThread().getName();
         ioContext.ioRecord.processId = Process.myPid();
-        ioContext.ioRecord.threadId = Thread.currentThread().getId();
+        ioContext.ioRecord.threadId = Process.myTid();
 
         ioContext.ioRecord.stacktrace = getStackTrace();
 
@@ -74,6 +74,8 @@ final class IOPools {
     }
 
     private void preHandleOpen(int fd) {
+        LogUtils.logi("preHandleOpen key:" + getKey(fd) + "     pools:" + mPools);
+
         if (!isOpen(fd)) {
             open(fd);
         }
@@ -92,6 +94,8 @@ final class IOPools {
             return;
         }
 
+        LogUtils.logi("stream ---> fd:" + fd + "    byteCount:" + byteCount + " mode:" + mode);
+
         ioContext.ioRecord.mode = mode;
         ioContext.state = IOContext.STREAMING;
         if (mode == READ) {
@@ -108,7 +112,7 @@ final class IOPools {
 
         LogUtils.logi("findIOContext ioContext:" + ioContext + "    " + (ioContext != null ? ("state:" + ioContext.state) : ""));
 
-        if (ioContext == null || IOContext.STREAMING != ioContext.state) {
+        if (ioContext == null || IOContext.CLOSED == ioContext.state) {
             return;
         }
 
@@ -116,13 +120,14 @@ final class IOPools {
         ioContext.ioRecord.closeTime = System.currentTimeMillis();
         ioContext.ioRecord.completeFields();
 
+        final String recycleKey = getKey(fd);
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
                 LogUtils.logi(Thread.currentThread().getName() + ": ioRecord insert :" + ioContext.ioRecord);
                 mIOHistoryDao.insert(ioContext.ioRecord);
 
-                recycle(ioContext);
+                recycle(ioContext, recycleKey);
             }
         });
     }
@@ -148,13 +153,14 @@ final class IOPools {
         return mPools.get(getKey(fd));
     }
 
-    private void recycle(IOContext ioContext) {
+    private void recycle(IOContext ioContext, String key) {
         if (ioContext != null && mRecyclers.size() < RECYCLER_MAX_SIZE) {
             mRecyclers.add(ioContext);
         }
 
-        if (ioContext != null && ioContext.ioRecord != null) {
-            mPools.remove(getKey(ioContext.ioRecord.fd));
-        }
+        mPools.remove(key);
+
+        LogUtils.logi("remove key from pools--- key:" + key
+                + "  pools:" + mPools);
     }
 }

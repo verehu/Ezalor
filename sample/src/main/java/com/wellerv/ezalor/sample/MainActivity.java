@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         isStartIO = true;
 
         //common io
-        Observable.intervalRange(0, 100, 0, 1200, TimeUnit.MILLISECONDS)
+        Observable.intervalRange(0, 20, 0, 1200, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -63,6 +63,27 @@ public class MainActivity extends Activity {
                         int randomCount = new Random().nextInt(50) + 5;
 
                         byte[] temp = new byte[1024];
+                        for (int i = 0; i < randomCount; i++) {
+                            os.write(temp);
+                        }
+                        Utils.closeIOStream(os);
+                    }
+                });
+
+        //unbuffered io
+        Observable.intervalRange(0, 6, 0, 200, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtils.logi(TAG, "unbuffered io count:" + aLong +
+                                "   thread:" + Thread.currentThread());
+
+                        String fileName = aLong + ".test";
+                        OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
+                        int randomCount = new Random().nextInt(20) + 10;
+
+                        byte[] temp = new byte[100];
                         for (int i = 0; i < randomCount; i++) {
                             os.write(temp);
                         }

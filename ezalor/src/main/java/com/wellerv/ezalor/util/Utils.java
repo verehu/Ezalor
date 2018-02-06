@@ -1,6 +1,8 @@
 package com.wellerv.ezalor.util;
 
+import android.os.Build;
 import android.os.Process;
+import android.system.Os;
 
 import com.wellerv.ezalor.AppContextHolder;
 
@@ -22,6 +24,9 @@ public class Utils {
 
     public static String getPathByFD(int fd) {
         try {
+            if (Build.VERSION.SDK_INT >= 21) {
+                return Os.readlink(String.format("/proc/%d/fd/%d", android.os.Process.myPid(), fd));
+            }
             return readlink(fd);
         } catch (Exception e) {
             e.printStackTrace();

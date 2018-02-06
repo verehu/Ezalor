@@ -8,17 +8,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class KeyUtils {
-    private static Map<Long, StringBuilder> sKeyBuilder = new ConcurrentHashMap<>();
+    private static Map<Integer, StringBuilder> sKeyBuilder = new ConcurrentHashMap<>();
 
     public static String getKey(int fid) {
-        long tid = Thread.currentThread().getId();
+        int tid = android.os.Process.myTid();
         StringBuilder builder = sKeyBuilder.get(tid);
 
         if (builder == null) {
             builder = new StringBuilder();
             builder.append(fid);
             builder.append(":");
-            builder.append(Thread.currentThread().getId());
+            builder.append(tid);
 
             sKeyBuilder.put(tid, builder);
         }

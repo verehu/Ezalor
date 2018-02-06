@@ -12,7 +12,7 @@ extern "C"
 JNIEXPORT jstring JNICALL Java_com_wellerv_ezalor_util_Utils_readlink(JNIEnv *env, jclass cls, jint fd) {
     char filename[F_LEN] = "temp";
     char buf[F_LEN];
-    snprintf(filename, F_LEN, "/proc/%ld/fd/%d", (long)getpid(), fd);
+    snprintf(filename, F_LEN, "/proc/%d/fd/%d", getpid(), fd);
     readlink(filename, buf, F_LEN);
     return env->NewStringUTF(buf);
 }
