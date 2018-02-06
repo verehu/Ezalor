@@ -1,6 +1,7 @@
 package com.wellerv.ezalor.sample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -58,7 +60,7 @@ public class MainActivity extends Activity {
                         LogUtils.logi(TAG, "common io count:" + aLong +
                                 "   thread:" + Thread.currentThread());
 
-                        String fileName = aLong + ".test";
+                        String fileName = aLong + "common.test";
                         OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
                         int randomCount = new Random().nextInt(50) + 5;
 
@@ -79,7 +81,7 @@ public class MainActivity extends Activity {
                         LogUtils.logi(TAG, "unbuffered io count:" + aLong +
                                 "   thread:" + Thread.currentThread());
 
-                        String fileName = aLong + ".test";
+                        String fileName = aLong + "unbuffered.test";
                         OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
                         int randomCount = new Random().nextInt(20) + 10;
 
@@ -90,5 +92,29 @@ public class MainActivity extends Activity {
                         Utils.closeIOStream(os);
                     }
                 });
+
+        //io in main thread
+        Observable.intervalRange(0, 3, 0, 500, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtils.logi(TAG, "unbuffered io count:" + aLong +
+                                "   thread:" + Thread.currentThread());
+
+                        String fileName = aLong + "main.test";
+                        OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
+                        int randomCount = new Random().nextInt(20) + 10;
+
+                        byte[] temp = new byte[4096];
+                        for (int i = 0; i < randomCount; i++) {
+                            os.write(temp);
+                        }
+                        Utils.closeIOStream(os);
+                    }
+                });
+
+        //start remote service
+        startService(new Intent(this, RemoteService.class));
     }
 }
