@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-//apply from: 'https://raw.githubusercontent.com/adwiv/android-fat-aar/master/fat-aar.gradle'
+apply from: 'publish.gradle'
 
 android {
     compileSdkVersion 26
@@ -61,6 +61,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compileOnly fileTree(include: ['*.jar'], dir: '../platformjar')
+
+
 }
 
 task clearJar(type: Delete) {
