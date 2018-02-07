@@ -37,24 +37,6 @@ android {
     }
 }
 
-//将sdk依赖移动到最后
-preBuild {
-    doLast {
-        def imlFile = file(project.name + ".iml")
-        println('Change ' + project.name + '.iml order')
-        try {
-            def parsedXml = (new XmlParser()).parse(imlFile)
-            def jdkNode = parsedXml.component[1].orderEntry.find { it.'@type' == 'jdk' }
-            parsedXml.component[1].remove(jdkNode)
-            def sdkString = "Android API " + android.compileSdkVersion.substring("android-".length()) + " Platform"
-            new groovy.util.Node(parsedXml.component[1], 'orderEntry', ['type': 'jdk', 'jdkName': sdkString, 'jdkType': 'Android SDK'])
-            groovy.xml.XmlUtil.serialize(parsedXml, new FileOutputStream(imlFile))
-        } catch (FileNotFoundException e) {
-            // nop, iml not found
-        }
-    }
-}
-
 dependencies {
     compileOnly fileTree(include: ['core-libart.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.ext.appcompatVersion"

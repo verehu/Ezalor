@@ -5,7 +5,7 @@ def siteUrl = 'https://github.com/WellerV/Ezalor'
 def gitUrl = 'git@github.com:WellerV/Ezalor.git'
 
 group = "com.wellerv.ezalor"
-def libName = "ezalor"
+def libName = "Ezalor"
 version = "${VERSION_NAME_PREFIX}"
 
 install {
@@ -75,7 +75,6 @@ bintray {
     configurations = ['archives']
 
     pkg {
-        userOrg = "wellervresp"
         repo = "android-maven"
         name = libName //发布到JCenter上的项目名字
         websiteUrl = siteUrl
