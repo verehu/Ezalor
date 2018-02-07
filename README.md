@@ -35,16 +35,17 @@ Given that it is just a tool for your application, I recommend that it be used f
 Ezalor now supports excel export via [EzalorTools][2].
 
 ## Known Issues
-Before you initialize ezalor, the application must have sd card write permission.
+Before you initialize ezalor, the application must have sdcard write permission.
 
 ## Support
 Any problem?
-1, Learn more from [sample][3]
-2, Submit issues
-3, Contact me for help by [email][4]
+
+1. Learn more from [sample][3]
+2. Submit issues
+3. Contact me for help by [email][4]
 
 
-  [1]:http://on8vjlgub.bkt.clouddn.com/ezalor%E5%8E%9F%E7%90%86%E5%9B%BE.png
+  [1]: http://on8vjlgub.bkt.clouddn.com/ezalor%E5%8E%9F%E7%90%86%E5%9B%BE.png
   [2]: https://github.com/WellerV/EzalorTools
   [3]: https://github.com/WellerV/Ezalor/tree/master/sample
   [4]: huweigoodboy@126.com
