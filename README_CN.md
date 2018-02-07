@@ -6,22 +6,20 @@
 [![PRs Welcome](https://img.shields.io/badge/prs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Code Climate](https://img.shields.io/codeclimate/issues/github/me-and/mdf.svg)](https://github.com/WellerV/Ezalor/issues)
 
-Ezalor is a io monitor library for Android, it support record all io operations.
-You can get the performance of each io operation.
+Ezalor是Android平台上的io监控库，它支持记录所有的io操作。
+您可以获得每个io操作的性能。
  
  ![Ezalor][1]
  
- ## [中文版点击这里](README_CN.md)
- 
-## Getting started
-Add dependencies by adding the following lines to your app/build.gradle.
+## 开始
+将以下代码添加到build.gradle来添加依赖关系。 
 ```groovy
 dependencies {
     //ezalor lib
    compile 'com.wellerv.ezalor:ezalor:0.1.0'
 }
 ```
-Then you should init the ezalor in your application.
+然后你需要application初始化Ezalor。
 ```java
 public class SampleApplication extends Application {
     @Override
@@ -32,20 +30,20 @@ public class SampleApplication extends Application {
     }
 }
 ```
-Given that it is just a tool for your application, I recommend that it be used for the debug version.
+鉴于它只是您的应用程序的工具，我建议将其用于调试版本。
 
-## Export Data
-Ezalor now supports excel export via [EzalorTools][2].
+## 导出数据
+Ezalor现在可以通过[EzalorTools][2]导出excel表格.
 
-## Known Issues
-Before you initialize ezalor, the application must have sdcard write permission.
+## 已知问题
+在你初始化Ezalor之前,请确保应用拥有sdcard写入权限.
 
-## Support
-Any problem?
+## 支持
+有任何问题?
 
-1. Learn more from [sample][3]
-2. Submit issues
-3. Contact me for help by [email][4]
+1. 了解[sample][3]
+2. 提交issues
+3. 通过[email]联系我[4]
 
 
   [1]: http://on8vjlgub.bkt.clouddn.com/ezalor%E5%8E%9F%E7%90%86%E5%9B%BE.png
