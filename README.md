@@ -8,6 +8,7 @@
 
 Ezalor is a io monitor library for Android, it support record all io operations.
 You can get the performance of each io operation.
+ 
  ![Ezalor][1]
  
 ## Getting started
@@ -20,7 +21,7 @@ dependencies {
 ```
 Then you should init the ezalor in your application.
 ```java
-public class SampleApplication extends TinkerApplication {
+public class SampleApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
