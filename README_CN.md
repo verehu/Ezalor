@@ -43,7 +43,7 @@ Ezalor现在可以通过[EzalorTools][2]导出excel表格.
 
 1. 了解[sample][3]
 2. 提交issues
-3. 通过[email]联系我[4]
+3. 通过[email][4]联系我
 
 
   [1]: http://on8vjlgub.bkt.clouddn.com/ezalor%E5%8E%9F%E7%90%86%E5%9B%BE.png
