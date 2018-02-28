@@ -3,6 +3,7 @@ package com.wellerv.ezalor.sample;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Toast;
 
@@ -47,12 +48,14 @@ public class MainActivity extends Activity {
             }
         }
 
+        final File sdcardDir = Environment.getExternalStorageDirectory();
+
         Toast.makeText(getBaseContext(), "start io", Toast.LENGTH_LONG).show();
 
         isStartIO = true;
 
         //common io
-        Observable.intervalRange(0, 20, 0, 1200, TimeUnit.MILLISECONDS)
+        Observable.intervalRange(0, 5, 0, 1200, TimeUnit.MILLISECONDS)
                 .observeOn(Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -94,7 +97,7 @@ public class MainActivity extends Activity {
                 });
 
         //io in main thread
-        Observable.intervalRange(0, 3, 0, 500, TimeUnit.MILLISECONDS)
+        Observable.intervalRange(0, 3, 0, 10000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -102,9 +105,51 @@ public class MainActivity extends Activity {
                         LogUtils.logi(TAG, "unbuffered io count:" + aLong +
                                 "   thread:" + Thread.currentThread());
 
-                        String fileName = aLong + "main.test";
-                        OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
+                        String fileName = "main.test";
+                        OutputStream os = new FileOutputStream(sdcardDir.getPath() + "/" + fileName);
                         int randomCount = new Random().nextInt(20) + 10;
+
+                        byte[] temp = new byte[4096];
+                        for (int i = 0; i < randomCount; i++) {
+                            os.write(temp);
+                        }
+                        Utils.closeIOStream(os);
+                    }
+                });
+
+        //sdcard root path io
+        Observable.intervalRange(0, 1, 0, 1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtils.logi(TAG, "unbuffered io count:" + aLong +
+                                "   thread:" + Thread.currentThread());
+
+                        String fileName = "sdcardRootIo.test";
+                        OutputStream os = new FileOutputStream(sdcardDir.getPath() + "/" + fileName);
+                        int randomCount = new Random().nextInt(20) + 10;
+
+                        byte[] temp = new byte[4096];
+                        for (int i = 0; i < randomCount; i++) {
+                            os.write(temp);
+                        }
+                        Utils.closeIOStream(os);
+                    }
+                });
+
+        //large file
+        Observable.intervalRange(0, 1, 0, 1000, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        LogUtils.logi(TAG, "large file:" + aLong +
+                                "   thread:" + Thread.currentThread());
+
+                        String fileName = aLong + "largeFile.test";
+                        OutputStream os = new FileOutputStream(cacheDir + "/" + fileName);
+                        int randomCount = new Random().nextInt(10) + 1024 * 3 / 2;
 
                         byte[] temp = new byte[4096];
                         for (int i = 0; i < randomCount; i++) {
